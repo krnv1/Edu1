@@ -1,0 +1,125 @@
+Docker
+
+Be the root user
+sudo su -
+
+
+yum install docker -y
+
+Start Docker
+-------------
+systemctl start docker
+
+Docker hub 
+-----------
+
+hub.docker.com 
+
+register and login
+
+Public registry - Docker images are available
+
+Docker Daemon:
+**************
+
+
+Commands:
+docker images -- To see what images you have locally
+or docker image ls
+
+
+docker pull ubuntu -- To pull single image from the docker hub registry to docker host
+
+docker pull tomcat:7 -- To pull the specific version, mention version else latest image will be pulled
+
+To remove an image from local
+docker rmi tomcat:7 
+--Deletion can also be done using the image id (which you can get using docker images)
+docker rmi -f imagename -- To delete the image forcefully
+
+
+Pull --> Run --> Create Container
+Run the docker
+
+docker run  ubuntu  -- If the image is not yet pulled the latest version will be pulled 
+
+
+docker ps -a
+
+docker stats -- to check the CPU usage (to come out of it ctrl + C)
+
+docker run -it --name cl centos
+
+docker rm -f <containerid> -- delete container
+
+docker rm -f $(docker ps -aq) --To delete all containers in the docker host
+
+Docker run --name n1 nginx
+to exit press ctrl c
+
+Launch containers with a Mode
+1. Foreground Mode :     
+			docker run --name c1 -it centos
+			//we will be inside the centos container
+			ctrl p and then  q //container will be running and you will be out of the container
+			docker attach c1 //Attach to the container terminal again
+			
+			exit //container will be exited and you will be out of the container
+			//if run exit then start container again
+			docker start c1 // it will be started but not attached
+			docker attach c1 //the container will be active
+			
+			
+2. Detached Mode
+			container will be up and running
+			you will not be on the container 
+			
+			docker run --name n1 -d nginx
+			
+3. Interactive Detached mode
+			docker run --name n2 -itd nginx
+			//container gets created but we are not on the container 
+			docker attach n2 //the container will be active
+
+
+OS images should have -it or -itd other dockers can be in detached mode
+
+3. Access the container
+**** images of type web and app servers
+Every image of type web, app or Db servers will have a port exposed to it which helps to access the servers
+
+docker run --name n1 -d nginx
+ps -a //port 80/tcp will be visible
+//ports are visible only when the container is run in detached mode
+
+netstat -ntlp // to get the port currently used in linux
+
+
+docker run --name n2 -d -p 8282:80 nginx
+<publicip of ec2>:8282
+
+docker run --name web -d -P httpd //if we use "P" any free port will be automatically mapped to the httpd imagename
+
+
+Docker volumes
+**************
+
+1. Named volumes
+
+step 1: we will create a volume of specific name
+> the volume always gets created in the docker area : /var/lib/docker/volumes
+
+docker volume create myvol
+docker  volume ls // shows the list of available volumes
+
+step 2: map the volume with the directory of the container whose data has to be preserved
+docker run --name v1 -it -v myvol:/tmp centos
+
+step 3:
+
+
+2. Bind mounts
+
+docker run --name web -d -v /root/ecomm/:/usr/local/apache2/htdocs -P httpd
+
+docker and jenkins 

@@ -1,0 +1,35 @@
+Jenkins
+
+On the EC2 machine
+Install Java 8 // java 8 or java 11 is supported by Jenkins
+yum install java-1.8.0-openjdk-devel
+
+Download and install Jenkins
+Install jenkins
+*********************
+Execute the 2 commands
+
+  sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+  sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+  execute command install jenkins
+
+ yum install jenkins -y
+
+
+Start Jenkins Server
+systemctl start jenkins
+
+cd /var/lib/jenkins
+
+Check Status 
+systemctl status jenkins
+
+Copy the EC2 server IP
+
+and on the local browser type the (IP + ":8080")
+
+cat 
+
+user id : admin
+password: admin
