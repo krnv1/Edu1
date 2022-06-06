@@ -20,6 +20,7 @@ Execute the 2 commands
 Start Jenkins Server
 systemctl start jenkins
 
+the jenkins directory is /var/lib/jenkins
 cd /var/lib/jenkins
 
 Check Status 
@@ -33,3 +34,38 @@ cat
 
 user id : admin
 password: admin
+
+In case  you forget the Userid and password go to 
+cd /var/lib/jenkins/users
+cat users.xml 
+and password will be found
+
+
+Triggers 
+********
+Project > Configure > Build Triggers
+
+1. Build Periodically
+	Provides a cron-like feature to periodically execute this project
+	Schedule - MINUTE HOUR DOM MONTH DOW
+	
+2. PollSCM
+	Configure Jenkins to poll changes in SCM.
+	Schedule MINUTE HOUR DOM MONTH DOW
+	
+3. Github WebHook Triggers
+	When Jenkins receives a GitHub push hook, GitHub Plugin checks 
+	to see whether the hook came from a GitHub repository which
+	matches the Git repository defined in SCM/Git section of this job. 
+	a. On Jenkins, Check this option and save
+	b. On Github, go to the repository and click on settings
+	c. i. Click on Webhooks and enter the URL as https://<AWSPublicIP>:8080/github-webhook 
+	  ii. Select Content Type as json
+	 iii. Which events? Select "Just te Push Event"
+	d. Add Webhook
+
+4. Trigger builds remotely
+	This works by executing the URL whenever you want to build
+	URL: JENKINS_URL/job/CloneRepo/build?token=TOKEN_NAME
+	http://3.145.93.124:8080/job/CloneRepo/build?token=token1
+

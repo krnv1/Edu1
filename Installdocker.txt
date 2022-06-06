@@ -104,6 +104,11 @@ docker run --name web -d -P httpd //if we use "P" any free port will be automati
 Docker volumes
 **************
 
+Q: How do you make sure that a file from the host machine will be available in the container when the container is launcehed?
+Ans: This can be achieved by creating a volume and mapping it to the container during runtime.
+Even if the docker container is deleted, the files present in the container is preserved in the volume.
+
+
 1. Named volumes
 
 step 1: we will create a volume of specific name
@@ -112,14 +117,44 @@ step 1: we will create a volume of specific name
 docker volume create myvol
 docker  volume ls // shows the list of available volumes
 
+//to delete a volume
+docker volume ls //lists the volumes
+docker volume rm <volume_name>
+
+
 step 2: map the volume with the directory of the container whose data has to be preserved
-docker run --name v1 -it -v myvol:/tmp centos
+docker run --name v1 -it -v myvol:/tmp centos //volume mapping is done at the runtime
 
-step 3:
-
+step 3: check if the data is preserved on the volume or not
+	The directory where the container's data gets preserved is : 
+	/var/lib/docker/volumes/<volume_name>/_data
+	
+The files saved in the container will get saved to the Volume and 
+the files saved in the volume will also get saved in the /tmp directory on the container
 
 2. Bind mounts
 
-docker run --name web -d -v /root/ecomm/:/usr/local/apache2/htdocs -P httpd
+Is a type of volume in which any directory of the host machine can be mapped to the container directory
 
-docker and jenkins 
+Difference between Named and Bind mount is that the name and number of bind mount volumes will not be available
+where as the named mount volume can be viewed with the command "docker volume ls".
+
+Only way to get the volume name is using the "inspect" command 
+docker inspect web 
+where you can check the Mount section to get the source and destination
+
+Deploy an ecommerce application on a httpd image container 
+ecomm app code: github 
+1. git clone https://github.com/Sonal0409/ecomm.git
+2. Copy the current directory files on the container directory
+	
+	On the httpd container the default directory for placing any data or file is /usr/local/apache2/htdocs/
+	
+	docker run --name web -d -v /root/ecomm/:/usr/local/apache2/htdocs -P httpd
+	
+	docker ps -a //get the port number from here
+3. Go to <AWSPublicIP>:<port number> from the browser and the code will be deployed
+
+//Developer does some changes on github
+git pull origin master
+//the changes will be immediately visible on the docker webapp
