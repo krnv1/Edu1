@@ -24,16 +24,18 @@ Docker Daemon:
 
 
 Commands:
-docker images -- To see what images you have locally
-or docker image ls
 
 
-docker pull ubuntu -- To pull single image from the docker hub registry to docker host
+$ docker images -- To see what images you have locally
+or 
+$ docker image ls
 
-docker pull tomcat:7 -- To pull the specific version, mention version else latest image will be pulled
+$ docker pull ubuntu -- To pull single image from the docker hub registry to docker host
+
+$ docker pull tomcat:7 -- To pull the specific version, mention version else latest image will be pulled
 
 To remove an image from local
-docker rmi tomcat:7 
+docker rmi tomcat:7 // If the latest version is installed then mentioning the tag name is not required
 --Deletion can also be done using the image id (which you can get using docker images)
 docker rmi -f imagename -- To delete the image forcefully
 
@@ -41,18 +43,23 @@ docker rmi -f imagename -- To delete the image forcefully
 Pull --> Run --> Create Container
 Run the docker
 
-docker run  ubuntu  -- If the image is not yet pulled the latest version will be pulled 
+docker run  ubuntu  -- If the image is not yet pulled and available locally the latest version will be pulled and run
 
-
+To see the status of conatainers
 docker ps -a
 
 docker stats -- to check the CPU usage (to come out of it ctrl + C)
+
+uname //gives the os which has been installed
+
+ps -ef | wc -l 
 
 docker run -it --name cl centos
 
 docker rm -f <containerid> -- delete container
 
 docker rm -f $(docker ps -aq) --To delete all containers in the docker host
+docker system prune --all  // This will remove all stopped containers and needs to be run after the above command
 
 Docker run --name n1 nginx
 to exit press ctrl c
