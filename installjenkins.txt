@@ -41,7 +41,7 @@ password: admin
 In case  you forget the Userid and password go to 
 cd /var/lib/jenkins/users
 cat users.xml 
-and password will be found
+and password can be found
 
 
 Triggers 
