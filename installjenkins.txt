@@ -12,13 +12,16 @@ Execute the 2 commands
   sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
   sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 
-  execute command install jenkins
+  execute command to install jenkins
 
  yum install jenkins -y
 
 
 Start Jenkins Server
-systemctl start jenkins
+systemctl start jenkins --->AWS
+
+or 
+service jenkins start ----> ubuntu lab 
 
 the jenkins directory is /var/lib/jenkins
 cd /var/lib/jenkins
@@ -61,7 +64,7 @@ Project > Configure > Build Triggers
 	b. On Github, go to the repository and click on settings
 	c. i. Click on Webhooks and enter the URL as https://<AWSPublicIP>:8080/github-webhook 
 	  ii. Select Content Type as json
-	 iii. Which events? Select "Just te Push Event"
+	 iii. Which events? Select "Just the Push Event"
 	d. Add Webhook
 
 4. Trigger builds remotely
