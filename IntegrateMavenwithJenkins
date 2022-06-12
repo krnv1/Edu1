@@ -1,0 +1,58 @@
+Build Tools help to implement build process
+
+Build Tools
+> Maven (JAVA)
+> ANT (PHP)
+> GRADLE (JAVA)
+> PYBUILDER (PYTHON)
+> MSBUILD (.NET)
+
+Maven:                                                                                                                                
+> Maven is a powerful tool that provides process to build the code                                                                    
+> Maven is a plugin based tool                                                                                                        
+> Anything that you want to do in Maven, you have to use Maven plugins                                                                
+> 2 types of plugins in Maven: Details in https://maven.apache.org/plugins/index.html                                                 
+    > Core Plugins == That perform main Build tasks                                                                                   
+    
+            Tasks                               Plugin              Command/Goal
+      1. Compile the code                     Compiler Plugin          compile
+      2. Execute Test cases                   Surefire plugin          test 
+      3. Package the code                     Package Plugin           package
+      4. Deploy the Artifact or Artifactory   Deploy                   deploy
+      5. Clean up previous build files        clean                    clean
+      
+    > Reporting Plugins == Validate and generate reports (xml, html, .csv, txt)    
+    
+            Tasks                               Plugin              Command/Goal
+      1. Review the code                       PMD, CPD Plugins         pmd:pmd
+      2. Generate Test Reports                 surefirereports          test
+      3. Code Coverage                         cobertura                cobertura:cobertura
+      4. sonaqube(tool)                        sonarqube                 sonarqube
+        PS: Sonarqube can perform Code review and code coverage for any programming language
+
+Maven  project is created as the very first step of writing the source code
+
+It is prepared by the developer and given to devops engineer
+
+Maven project consists of :
+> src/main/java =========== Here Developrs will write the source code
+  > source code - java
+> src/main/resources ====== Here Developers will mainatain resource document utilities
+> src/test/java =========== Test cases will be written here
+  > unit test
+  > functional test cases
+> src/test/resources ====== Here test resources like Test Data and Excel sheets will be placed
+
+> pom.xml (project object module) -- Every Maven project will create a pom.xml file. If this file is not prsent, the project will not work
+  > dependencies == tools or s/w needed for developers to write the code and test code
+  > plugins == names and version of plugins needed to build and review the code and test cases
+  
+Repositories : Location where dependencies and plugins are stored and Maven will fetch them to complete the build process
+        > Central Repository
+        > Local Repository
+  
+ -------------------------------------------------------------------------------------------------------------------------------
+ 
+To install Maven
+
+yum install maven -y
