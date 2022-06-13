@@ -1,0 +1,148 @@
+Kubernetes - Container Orchestration Tool       Date 06/10/2022
+
+Kubernetes or K8s
+
+K8s can orchestrate containers of any type:
+
+Supports various CRI - Container Runtime Interface
+
+When Setting up K8s cluster, we have to provide CNI - Container Network Interface
+
+Azure - AKS
+AWS - EKS
+GCP - GKE
+
+Secrets, Persistent Volume, Config Maps, Namespaces, Dashboard
+
+It has Master and Worker Machines.
+Every Machine should have 4 GB Ram and 2 CPU Core.
+
+Kubernetes is downloaded on the Master Machine and initated using KubeADM
+When the token from the master machine is copied to the worker machine, it joins the master.
+
+Master has 4 components . Master machines are also called control plane
+1. apiserver
+2. Scheduler
+3. etcd
+4. Controller manager
+
+Docker
+
+Worker has
+1. kubelet
+
+Docker
+
+There are three ways to setup a kubenetes Cluster
+1. Hard way - We start with Ubuntu in every system and then install all the other components mentioned above. 
+   It takes around 2.5 hours to setup using this way and it is obsolete now.
+2. kubeadm - It takes around 20 Mins
+3. Readymade clusters - It is created by the Cloud providers. GCP Cluster is readymade cluster. Takes around 5 mins
+
+Every command in k8s starts with kubectl - Kube controller
+
+1. apiserver - It is the principal Component. This component is responsible to talk to the administrator and handles its requests.
+2. Scheduler - It manages and watches API server. It is like a watchman. 
+	Scheduler will tell apiserver to create and distribute the containers on the worker machines depending on the available recorces on the worker machine.
+	On the Scheduler's response, api server will send request to kubelet on the worker machines. 
+	Kubelet on request from apiserver, will talk to docker and pull the image from dockerhub.
+	On completing the request, kubelet on worker machines will inform apiserver that all requested containers have been created and  they are up and running
+3. etcd - The apiserver will have to store the information that number of rquested containers have been created and this info will be stored in etcd. 
+	It is key value store. It is a small db which stored info like - 
+	- no of containers created
+	- where the containers are running
+	- how many worker machines you have
+	- what applications are running in the cluster
+	- how many containers are there in the cluster
+	
+4. Controller manager - If a container/replica on worker machines goes down then ctlm manager will have to recreate its replica on another machine.
+	It the controller manager that will take care of high availability of the containers in the kuberetes cluster
+
+Pod - It is the smallest object that we can create in k8s. 
+		Is the layer of abstraction over the Container. 
+		Pod can contain multiple containers but k8s document says that in 1 pod only 1 container should be there.
+----------------------------------------------------------
+
+To connect to gke:
+Click on 3 dots of the cluster and connect
+copy the connection command -
+gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project utility-folder-352719
+Open cloud shell and move it to new window. 
+
+kubectl get nodes //the nodes are the slaves of the master machine
+
+create a pod and schedule
+$ kubectl run pod1 --image nginx
+
+similar to docker
+docker run --name c1 nginx
+
+
+Check the pod created or not in the cluster
+kubectl get pods
+
+
+Which node is the pods scheduled:
+
+kubectl get pods -o wide
+(Similar to docker -  docker ps -a)
+
+To see all the details of the container
+kubectl describe pod pod1 | less
+(Similar to docker - docker inspect <containername>
+
+
+
+
+Replicaset
+*********
+vim replicaset1.yml
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myrs
+spec:
+ replicas: 3
+ selector:
+  matchLabels:
+   type: webserver
+ template:
+  metadata:
+   name: mypod
+   labels:
+    type: webserver
+  spec:
+   containers:
+     - name: c1
+       image: nginx
+	   
+Create replicaset
+
+kubectl create -f replicaset1.yml
+
+Get all the objects created in the cluster
+$ kubectl get all
+
+Get pods created in the cluster based on the labels
+$ kubectl get pods -l type=webserver
+
+kubectl get nodes
+kubectl scale replicaset myrs --replicas=5  //scale the replicaset from 3 to 5
+
+kubectl get all // now it will have 5 replicas
+
+Describe details of the replicaset
+kubectl describe replicaset
+
+To delete a pods
+$ kubectl delete pod myrs-5fzb2
+
+kubectl get all
+
+kubectl get all --all
+
+Deployment
+**********
+Deployment is just like Replicaset.
+Only difference is - once deployment is complete, in future you can update the image of the deployment
