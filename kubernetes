@@ -90,6 +90,68 @@ kubectl get pods -o wide
 To see all the details of the container
 kubectl describe pod pod1 | less
 (Similar to docker - docker inspect <containername>
+Press q to comeout of it
+
+Replicaset -
+Replicaset is an object in Kubernetes that is used to create multiple pods of the same image
+E.G. - If we want to create 5 pods of nginx in your cluster it can be created using replicaset
+It does not have a single line command. It will have an Object definition file or Object manifest file
+They are written in YAML format (key: value) with a strict structure.
+
+Every YAML file in k8s will consist of 4 sections
+1. kind: what object to create (pod or replicaset)
+2. apiVerison: It is basically a schema used by k8s to create this object. The value can be 1
+3. metadata: name, labels
+
+Create a pod using ibject definition file
+
+** Single container pod ** 
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+ containers:
+		  
+			  
+				  
+		  
+		   
+  - name: nginx
+		  
+				   
+	   
+			  
+			   
+    image: nginx:1.14.2
+	
+				 
+
+
+** Multi container POD **
+vim pod_definition.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container
+spec:
+ containers:
+ - name: nginx
+   image: nginx:1.10-alpine
+ - name: alpine
+   image: alpine:3.5
+   command: ["watch", "wget", "-q0-", "localhost"]
+
+$ kubectl create -f pod_definition.yml
+									
+
+kubectl get pods -o wide //Check which node the pod got created in
+																			  
+
+kubectl describe pod multi_container | less
 
 
 
@@ -146,3 +208,113 @@ Deployment
 **********
 Deployment is just like Replicaset.
 Only difference is - once deployment is complete, in future you can update the image of the deployment
+
+
+
+------------------------------------------------------------------------------
+6/14/2022
+
+
+----------
+Volumes
+----------
+
+
+Persistent volume
+
+vim pv_NFS.yml
+apiVersion: 
+
+kubectl get pv
+
+ls
+
+kubectl create -f pv.yml
+
+kubectl get pv
+
+vim pvc.yml
+
+To delete 
+   
+kubectl delete pv <pv_name>
+-------------
+Claim
+-------------
+
+vim pvc.yml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: pvc
+spec:
+ storageClassName: manual
+ accessModes:
+  - ReadWriteOnce
+ resources:
+  requests:
+   storage: 1Gi
+   
+kubectl create -f pvc.yml
+
+kubectl get pv
+
+Status of pv has got changed to Bound and the Claim path gets populated by default   
+
+vi pod-pv.yml
+
+apiVersion: v1
+kind: pod
+metadata:
+ name: pod-pvc
+spec:
+ containers:
+  - image: nginx
+    name: c1
+	volumeMounts:
+	 - mountPath: "/data"
+	   name: my-volume
+ volumes:
+  - name: my-volume
+    persistentVolumeClain:
+	 claimName: pvc
+	 
+kubectl create -f pod pod-pv.yml
+
+kubectl describe pods pod-pvc | less
+
+---------
+configmap
+---------
+
+vim config-pod.yml
+
+
+apiVersion: v1
+kind: Pod
+metadata: 
+ configpod
+spec:
+ containers:
+  - name: c1
+    image: nginx
+	volumeMounts:
+	 - name: myvolume
+	   mountPath: /etc/config
+ volumes:
+  - name: myvolume
+    configMap:
+	 name: config1
+	 
+	 
+kubectl exec -it config-pod --bash
+
+kubectl get pods
+
+cd /etc/config
+cat dev.properties
+
+kubectl edit configmap  config1 -o yaml
+
+kubectl exec -it config-pod --bash
