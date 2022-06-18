@@ -27,9 +27,9 @@ go to https://hub.docker.com/
 
 Repo name lalit0211/devops1
 
-docker login -u lalit0211 --password-stdin Kolkata!1
+docker login -u lalit0211 --password-stdin *****
 uname lalit0211
-password: Kolkata!1
+password: *******
 
 docker build -t <hub-user>/<repo-name>[:<tag>] .
 docker build -t lalit0211/devops1:v1 .
