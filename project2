@@ -1,0 +1,45 @@
+Project 2
+
+git push https://github.com/lalitpandey02/ecomm.git
+
+cd ecomm
+
+Create docker file in the ecomm folder
+
+vim docimg1
+FROM httpd:latest
+ADD . /usr/local/apache2/htdocs/
+EXPOSE 80
+
+docker build -t docimg1 .
+
+docker images
+
+docker run --name n21 -d -P docimg1
+
+docker ps -a
+
+Take public IP of the AWS EC2 server and port from the above command
+http://3.141.7.221:49153/
+
+go to https://hub.docker.com/
+
+
+Repo name lalit0211/devops1
+
+docker login -u lalit0211 --password-stdin *****
+uname lalit0211
+password: *******
+
+docker build -t <hub-user>/<repo-name>[:<tag>] .
+docker build -t lalit0211/devops1:v1 .
+
+docker tag <existing-image> <hub-user>/<repo-name>[:<tag>]
+docker tag docimg1 lalit0211/devops1:v1
+
+docker commit <existing-container> <hub-user>/<repo-name>[:<tag>] to commit changes
+docker commit n21 lalit0211/devops1:v1
+
+
+Now you can push this repository to the registry designated by its name or tag.
+docker push lalit0211/devops1:v1
